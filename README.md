@@ -1,5 +1,5 @@
 #pyptc
-The pyptc is a simple script that automates work platforms ptc, written in python by [@27sawyer] .
+The pyptc is a simple script that automates work platforms ptc, written in python by [@27sawyer]. Currently only works in firefox =)
 
     > PTC supported: neobux(required page in Spanish)
 
