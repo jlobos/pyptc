@@ -64,17 +64,17 @@ def detect_ads(_ptc, _user, _pass):
             sourcepage_text = BeautifulSoup(driver.page_source).get_text()
 
             if sourcepage_text.find('Ya ha visto este anuncio') >= 0 or sourcepage_text.find('El anuncio seleccionado no esta disponible.') >= 0:
-                print('[*] Anuncio ya visto - Ventana Cerrada')
+                print('[*] Ads seen - window closed ... ')
                 driver.close()
                 detect_popup(driver)                                                # En caso de ventana emergente
                 driver.switch_to_window(win[0])                                     # Cambiamos ventana Main
             else:
-                print('[-] Anuncio en proceso ...')
+                print('[-] Ads in process ...')
                 try:
                     driver.find_element_by_link_text('Cerrar').click()
-                    print('[-] Anuncio Completado =)')
+                    print('[-] Ads Complete =)')
                 except:
-                    print('[!] Error al encontrar anuncio, recargando anuncio')
+                    print('[!] Failed to find ads, recharging ...')
                     driver.close()
                 detect_popup(driver)
                 driver.switch_to_window(win[0])                                     # Cambiamos ventana (ventana main)
