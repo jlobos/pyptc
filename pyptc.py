@@ -74,6 +74,11 @@ def detect_ads(_ptc, _user, _pass):
                     driver.find_element_by_link_text('Cerrar').click()
                     print('[-] Ads Complete =)')
                 except:
+                    time.sleep(10)  # una segunda oportunidad =)
+                    try:
+                        driver.find_element_by_link_text('Cerrar').click()
+                    except:
+                        None
                     print('[!] Failed to find ads, recharging ...')
                     driver.close()
                 detect_popup(driver)
