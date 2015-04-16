@@ -57,7 +57,7 @@ def detect_ads(_ptc, _user, _pass):
             value = str(x).replace('\'','').replace('[','').replace(']','')
             driver.find_element_by_id('l0l' + value).click()                        # abrir
             driver.find_element_by_id('i' + value).click()                          # abrir, punto rojo
-            time.sleep(20)
+            time.sleep(25)
 
             win = driver.window_handles                                             # Lista de ventanas abiertas
             driver.switch_to_window(win[1])                                         # Cambiamos ventana
@@ -74,11 +74,6 @@ def detect_ads(_ptc, _user, _pass):
                     driver.find_element_by_link_text('Cerrar').click()
                     print('[-] Ads Complete =)')
                 except:
-                    time.sleep(10)  # una segunda oportunidad =)
-                    try:
-                        driver.find_element_by_link_text('Cerrar').click()
-                    except:
-                        None
                     print('[!] Failed to find ads, recharging ...')
                     driver.close()
                 detect_popup(driver)
