@@ -132,8 +132,8 @@ def neobux_run(_user, _pass):
 # +-----------------------------------------------------------------------
 def run(_ptc, _user, _pass):
     if _ptc == 'neobux':
-        neobux_run(_user, _pass)
         print('[-] neobux select')
+        neobux_run(_user, _pass)
     else:
         print('[!] error select PTC!')
 # +-----------------------------------------------------------------------
