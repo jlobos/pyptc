@@ -1,8 +1,8 @@
 #!/bin/python
-# coding: utf-8
-# Author: https://twitter.com/27Sawyer
-# Version: beta 1.0
-# Licence: GPLv2
+# coding    : utf-8
+# Author    : @27Sawyer
+# Version   : beta 1.0
+# Licence   : GPLv2
 # +-----------------------------------------------------------------------
 # pip install selenium
 # pip install beautifulsoup4
