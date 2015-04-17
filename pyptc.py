@@ -24,7 +24,12 @@ from bs4 import BeautifulSoup
 neobux = 'https://www.neobux.com/m/l/'
 
 # +-----------------------------------------------------------------------
-# Modulo Extra
+# Extra Modules
+def module_neobuxAdPrize(_cookies):
+    driver.get('http://www.neobux.com/m/v/')
+    driver.refresh()
+
+
 # +-----------------------------------------------------------------------
 
 def detect_popup(driver):
@@ -91,19 +96,18 @@ def neobux_request(_cookies):
     while True:
         try:
             response = requests.get('http://www.neobux.com/adalert/g/', headers=headers, params=payload, cookies=cookies)
-            break
+            # print(response.content)
+            part = response.content.replace('\'', '').replace('[', ' ').replace(']', ' ').replace(',', ' ')
+            list_var = part.split()
+            return list_var
         except:
             print('[!] error connecting API (http://www.neobux.com/adalert/g/?tF)')
             time.sleep(10)
-    # print(response.content)
-    part = response.content.replace('\'', '').replace('[', ' ').replace(']', ' ').replace(',', ' ')
-    list_var = part.split()
-    return list_var
 
 def neobux_run(_user, _pass):
+    driver = webdriver.Firefox()
+    driver.get(neobux)
     try:
-        driver = webdriver.Firefox()
-        driver.get(neobux)
         textbox_user = driver.find_element_by_id('Kf1')
         textbox_user.send_keys(_user)
         textbox_password = driver.find_element_by_id('Kf2')
@@ -125,9 +129,9 @@ def neobux_run(_user, _pass):
         if list_var[0] == '1':
 
             print('[-] $ ' + list_var[8])
-            print('[-] Fixed Advertisements: ' + list_var[1])
-            print('[-] Micro Exposure: ' + list_var[5])
-            print('[-] Fixed Advertisements: ' + list_var[2])
+            print('[-] Fixed Advertisements : ' + list_var[1])
+            print('[-] Micro Exposure       : ' + list_var[5])
+            print('[-] Fixed Advertisements : ' + list_var[2])
             print('[-] Total Ads: ' + list_var[18])
 
             if int(list_var[1]) > 0 or int(list_var[5]) > 0 or int(list_var[2]) > 0:
@@ -181,9 +185,9 @@ def main(argv):
 
     run(_ptc, _user, _pass)
 
-def _exit(signum, frame):
+def exit(signum, frame):
     sys.exit()
 
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, _exit)
+    signal.signal(signal.SIGINT, exit)
     main(sys.argv)
