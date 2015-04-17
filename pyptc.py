@@ -24,6 +24,8 @@ from bs4 import BeautifulSoup
 neobux = 'https://www.neobux.com/m/l/'
 
 # +-----------------------------------------------------------------------
+# Modulo Extra
+# +-----------------------------------------------------------------------
 
 def detect_popup(driver):
     try:
@@ -33,7 +35,7 @@ def detect_popup(driver):
     except:
         pass
 
-def detect_ads(_cookies):
+def neobux_detect_ads(_cookies):
     driver = webdriver.Firefox()
     driver.get('http://www.neobux.com/m/v/')
     for cookie in _cookies:
@@ -79,7 +81,7 @@ def detect_ads(_cookies):
             driver.switch_to_window(win[0])
         driver.close()
 
-def request(_cookies):
+def neobux_request(_cookies):
     headers = {'user-agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows 98)'}
     payload = {'t': 'F' + str(int(time.time() * 1000))}
     cookies = {}
@@ -97,7 +99,6 @@ def request(_cookies):
     part = response.content.replace('\'', '').replace('[', ' ').replace(']', ' ').replace(',', ' ')
     list_var = part.split()
     return list_var
-
 
 def neobux_run(_user, _pass):
     try:
@@ -120,7 +121,7 @@ def neobux_run(_user, _pass):
     # +-------------------------------------------------------------------
     print('[-] start!')
     while True:
-        list_var = request(_cookies)
+        list_var = neobux_request(_cookies)
         if list_var[0] == '1':
 
             print('[-] $ ' + list_var[8])
@@ -131,7 +132,7 @@ def neobux_run(_user, _pass):
 
             if int(list_var[1]) > 0 or int(list_var[5]) > 0 or int(list_var[2]) > 0:
                 print('[-] ---')
-                detect_ads(_cookies)
+                neobux_detect_ads(_cookies)
             else:
                 seconds = random.randrange(start=20, stop=60)
                 print('[!] no ads, recheck in ' + str(seconds) + ' seconds')
