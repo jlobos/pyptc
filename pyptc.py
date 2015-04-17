@@ -11,23 +11,27 @@
 __author__ = '@27Sawyer'
 __version__ = 'beta 1.0'
 
-import argparse,time,sys,requests,random,re,signal
+import argparse
+import time
+import sys
+import requests
+import random
+import re
+import signal
 from selenium import webdriver
 from bs4 import BeautifulSoup
 
-_ptc = '';_user = '';_pass = ''
 neobux = 'https://www.neobux.com/m/l/'
 
 # +-----------------------------------------------------------------------
 
 def detect_popup(driver):
-    "Funcion que detecta ventanas emergentes"
     try:
         alert = driver.switch_to_alert()
         alert.accept()
         print('[*] alert accept!')
     except:
-        None
+        pass
 
 def detect_ads(_cookies):
     driver = webdriver.Firefox()
@@ -36,10 +40,11 @@ def detect_ads(_cookies):
         driver.add_cookie(cookie)
     driver.refresh()
 
-    sourcepage = BeautifulSoup(driver.page_source)                  # Source Code
+    sourcepage = BeautifulSoup(driver.page_source)
 
     ads = re.findall(r'id="l0l(.*?)</td></tr></tbody></table></td></tr></tbody></table>', str(sourcepage))
-    i = 0; ads_number = []
+    i = 0
+    ads_number = []
     for x in ads:
         l = re.findall(r'http://cache1.neodevlda.netdna-cdn.com/imagens/estrela_16.gif"', ads[i])
         i += 1
@@ -47,20 +52,21 @@ def detect_ads(_cookies):
             ads_number.append(re.findall(r'(.*?)" onclick="ggz\(', x))
 
     for x in ads_number:
-        value = str(x).replace('\'','').replace('[','').replace(']','')
-        driver.find_element_by_id('l0l' + value).click()                        # abrir
-        driver.find_element_by_id('i' + value).click()                          # abrir, punto rojo
+        value = str(x).replace('\'', '').replace('[', '').replace(']', '')
+        driver.find_element_by_id('l0l' + value).click()
+        driver.find_element_by_id('i' + value).click()
         time.sleep(25)
 
-        win = driver.window_handles                                             # Lista de ventanas abiertas
-        driver.switch_to_window(win[1])                                         # Cambiamos ventana
+        win = driver.window_handles
+        driver.switch_to_window(win[1])
         sourcepage_text = BeautifulSoup(driver.page_source).get_text()
 
-        if sourcepage_text.find('Ya ha visto este anuncio') >= 0 or sourcepage_text.find('El anuncio seleccionado no esta disponible.') >= 0:
+        if sourcepage_text.find('Ya ha visto este anuncio') >= 0 or sourcepage_text.find(
+                'El anuncio seleccionado no esta disponible.') >= 0:
             print('[*] Ads seen - window closed ... ')
             driver.close()
-            detect_popup(driver)                                                # En caso de ventana emergente
-            driver.switch_to_window(win[0])                                     # Cambiamos ventana Main
+            detect_popup(driver)
+            driver.switch_to_window(win[0])
         else:
             print('[-] Ads in process ...')
             try:
@@ -70,7 +76,7 @@ def detect_ads(_cookies):
                 print('[!] Failed to find ads, recharging ...')
                 driver.close()
             detect_popup(driver)
-            driver.switch_to_window(win[0])                                     # Cambiamos ventana (ventana main)
+            driver.switch_to_window(win[0])
         driver.close()
 
 def request(_cookies):
@@ -81,28 +87,28 @@ def request(_cookies):
         cookies[s_cookie['name']] = s_cookie['value']
 
     response = requests.get('http://www.neobux.com/adalert/g/', headers=headers, params=payload, cookies=cookies)
-    #print(response.content)
-    part = response.content.replace('\'', '').replace('[',' ').replace(']',' ').replace(',',' ')
+    # print(response.content)
+    part = response.content.replace('\'', '').replace('[', ' ').replace(']', ' ').replace(',', ' ')
     list_var = part.split()
     return list_var
 
 def neobux_run(_user, _pass):
     driver = webdriver.Firefox()
-    driver.get(neobux)                                              # Entra a la pagina
-    textbox_user = driver.find_element_by_id('Kf1')                 # Nombre de Usuario, completamos datos
+    driver.get(neobux)  # Entra a la pagina
+    textbox_user = driver.find_element_by_id('Kf1')  # Nombre de Usuario, completamos datos
     textbox_user.send_keys(_user)
-    textbox_password = driver.find_element_by_id('Kf2')             # Password
+    textbox_password = driver.find_element_by_id('Kf2')  # Password
     textbox_password.send_keys(_pass)
     driver.find_element_by_link_text('enviar').click()
-    time.sleep(1)                                                   # Esperamos x segundos
+    time.sleep(1)  # Esperamos x segundos
 
-    _cookies = driver.get_cookies()                                 # Cookies =)
+    _cookies = driver.get_cookies()  # Cookies =)
     driver.close()
 
     # +-------------------------------------------------------------------
     print('[-] start!')
     while True:
-        list_var = request(_cookies)                                # Peticion get
+        list_var = request(_cookies)  # Peticion get
         if list_var[0] == '1':
 
             print('[-] $ ' + list_var[8])
@@ -121,7 +127,7 @@ def neobux_run(_user, _pass):
         else:
             print('[!] error sesion')
             time.sleep(random.randrange(start=300, stop=600))
-            run(_ptc,_user,_pass)
+            run(_ptc, _user, _pass)
 
 # +-----------------------------------------------------------------------
 def run(_ptc, _user, _pass):
@@ -142,7 +148,7 @@ ______ ___.___/  |_|  |__   ____   ____\______   _/  |_  ____
 |__|   \/               \/            \/        bot for ptc \/
 
 Version     :   %s
-Author      :   %s ''' %(__version__,__author__))
+Author      :   %s ''' % (__version__, __author__))
     print('')
     return
 
