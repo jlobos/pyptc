@@ -11,7 +11,7 @@
 __author__ = '@27Sawyer'
 __version__ = 'beta 1.0'
 
-import argparse,time,sys,requests,random,re
+import argparse,time,sys,requests,random,re,signal
 from selenium import webdriver
 from bs4 import BeautifulSoup
 
@@ -29,19 +29,14 @@ def detect_popup(driver):
     except:
         None
 
-def detect_ads(_ptc, _user, _pass):
+def detect_ads(_cookies):
     driver = webdriver.Firefox()
-    driver.get(neobux)                                              # Entra a la pagina
-    textbox_user = driver.find_element_by_id('Kf1')                 # Nombre de Usuario, completamos datos
-    textbox_user.send_keys(_user)
-    textbox_password = driver.find_element_by_id('Kf2')             # Password
-    textbox_password.send_keys(_pass)
-    driver.find_element_by_link_text('enviar').click()
-    time.sleep(7)                                                   # Esperamos x segundos
-    driver.find_element_by_link_text('Ver Anuncios').click()
+    driver.get('http://www.neobux.com/m/v/')
+    for cookie in _cookies:
+        driver.add_cookie(cookie)
+    driver.refresh()
 
-    sourcepage = BeautifulSoup(driver.page_source)                  # Codigo fuente de la pagina
-    _cookies = driver.get_cookies()
+    sourcepage = BeautifulSoup(driver.page_source)                  # Source Code
 
     # +-------------------------------------------------------------------
     def search_advertising():
@@ -81,7 +76,6 @@ def detect_ads(_ptc, _user, _pass):
         driver.close()
     # +-------------------------------------------------------------------
     search_advertising()
-    return _cookies
 
 def request(_cookies):
     headers = {'user-agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows 98)'}
@@ -104,7 +98,7 @@ def run(_ptc, _user, _pass):
     textbox_password = driver.find_element_by_id('Kf2')             # Password
     textbox_password.send_keys(_pass)
     driver.find_element_by_link_text('enviar').click()
-    time.sleep(7)                                                   # Esperamos x segundos
+    time.sleep(1)                                                   # Esperamos x segundos
 
     _cookies = driver.get_cookies()                                 # Cookies =)
     driver.close()
@@ -123,7 +117,7 @@ def run(_ptc, _user, _pass):
 
             if int(list_var[1]) > 0 or int(list_var[5]) > 0 or int(list_var[2]) > 0:
                 print('[-] ---')
-                _cookies = detect_ads(_ptc, _user, _pass)
+                detect_ads(_cookies)
             else:
                 seconds = random.randrange(start=20, stop=60)
                 print('[!] no ads, recheck in ' + str(seconds) + ' seconds')
@@ -165,5 +159,9 @@ def main(argv):
 
     run(_ptc, _user, _pass)
 
+def _exit(signum, frame):
+    sys.exit()
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, _exit)
     main(sys.argv)
