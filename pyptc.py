@@ -38,44 +38,40 @@ def detect_ads(_cookies):
 
     sourcepage = BeautifulSoup(driver.page_source)                  # Source Code
 
-    # +-------------------------------------------------------------------
-    def search_advertising():
-        ads = re.findall(r'id="l0l(.*?)</td></tr></tbody></table></td></tr></tbody></table>', str(sourcepage))
-        i = 0; ads_number = []
-        for x in ads:
-            l = re.findall(r'http://cache1.neodevlda.netdna-cdn.com/imagens/estrela_16.gif"', ads[i])
-            i += 1
-            if len(l) > 0:
-                ads_number.append(re.findall(r'(.*?)" onclick="ggz\(', x))
+    ads = re.findall(r'id="l0l(.*?)</td></tr></tbody></table></td></tr></tbody></table>', str(sourcepage))
+    i = 0; ads_number = []
+    for x in ads:
+        l = re.findall(r'http://cache1.neodevlda.netdna-cdn.com/imagens/estrela_16.gif"', ads[i])
+        i += 1
+        if len(l) > 0:
+            ads_number.append(re.findall(r'(.*?)" onclick="ggz\(', x))
 
-        for x in ads_number:
-            value = str(x).replace('\'','').replace('[','').replace(']','')
-            driver.find_element_by_id('l0l' + value).click()                        # abrir
-            driver.find_element_by_id('i' + value).click()                          # abrir, punto rojo
-            time.sleep(25)
+    for x in ads_number:
+        value = str(x).replace('\'','').replace('[','').replace(']','')
+        driver.find_element_by_id('l0l' + value).click()                        # abrir
+        driver.find_element_by_id('i' + value).click()                          # abrir, punto rojo
+        time.sleep(25)
 
-            win = driver.window_handles                                             # Lista de ventanas abiertas
-            driver.switch_to_window(win[1])                                         # Cambiamos ventana
-            sourcepage_text = BeautifulSoup(driver.page_source).get_text()
+        win = driver.window_handles                                             # Lista de ventanas abiertas
+        driver.switch_to_window(win[1])                                         # Cambiamos ventana
+        sourcepage_text = BeautifulSoup(driver.page_source).get_text()
 
-            if sourcepage_text.find('Ya ha visto este anuncio') >= 0 or sourcepage_text.find('El anuncio seleccionado no esta disponible.') >= 0:
-                print('[*] Ads seen - window closed ... ')
+        if sourcepage_text.find('Ya ha visto este anuncio') >= 0 or sourcepage_text.find('El anuncio seleccionado no esta disponible.') >= 0:
+            print('[*] Ads seen - window closed ... ')
+            driver.close()
+            detect_popup(driver)                                                # En caso de ventana emergente
+            driver.switch_to_window(win[0])                                     # Cambiamos ventana Main
+        else:
+            print('[-] Ads in process ...')
+            try:
+                driver.find_element_by_link_text('Cerrar').click()
+                print('[-] Ads Complete =)')
+            except:
+                print('[!] Failed to find ads, recharging ...')
                 driver.close()
-                detect_popup(driver)                                                # En caso de ventana emergente
-                driver.switch_to_window(win[0])                                     # Cambiamos ventana Main
-            else:
-                print('[-] Ads in process ...')
-                try:
-                    driver.find_element_by_link_text('Cerrar').click()
-                    print('[-] Ads Complete =)')
-                except:
-                    print('[!] Failed to find ads, recharging ...')
-                    driver.close()
-                detect_popup(driver)
-                driver.switch_to_window(win[0])                                     # Cambiamos ventana (ventana main)
+            detect_popup(driver)
+            driver.switch_to_window(win[0])                                     # Cambiamos ventana (ventana main)
         driver.close()
-    # +-------------------------------------------------------------------
-    search_advertising()
 
 def request(_cookies):
     headers = {'user-agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows 98)'}
@@ -90,7 +86,7 @@ def request(_cookies):
     list_var = part.split()
     return list_var
 
-def run(_ptc, _user, _pass):
+def neobux_run(_user, _pass):
     driver = webdriver.Firefox()
     driver.get(neobux)                                              # Entra a la pagina
     textbox_user = driver.find_element_by_id('Kf1')                 # Nombre de Usuario, completamos datos
@@ -127,6 +123,13 @@ def run(_ptc, _user, _pass):
             time.sleep(random.randrange(start=300, stop=600))
             run(_ptc,_user,_pass)
 
+# +-----------------------------------------------------------------------
+def run(_ptc, _user, _pass):
+    if _ptc == 'neobux':
+        neobux_run(_user, _pass)
+        print('[-] neobux select')
+    else:
+        print('[!] error select PTC!')
 # +-----------------------------------------------------------------------
 
 def banner():
