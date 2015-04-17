@@ -86,24 +86,36 @@ def request(_cookies):
     for s_cookie in _cookies:
         cookies[s_cookie['name']] = s_cookie['value']
 
-    response = requests.get('http://www.neobux.com/adalert/g/', headers=headers, params=payload, cookies=cookies)
+    while True:
+        try:
+            response = requests.get('http://www.neobux.com/adalert/g/', headers=headers, params=payload, cookies=cookies)
+            break
+        except:
+            print('[!] error connecting API (http://www.neobux.com/adalert/g/?tF)')
+            time.sleep(10)
     # print(response.content)
     part = response.content.replace('\'', '').replace('[', ' ').replace(']', ' ').replace(',', ' ')
     list_var = part.split()
     return list_var
 
-def neobux_run(_user, _pass):
-    driver = webdriver.Firefox()
-    driver.get(neobux)
-    textbox_user = driver.find_element_by_id('Kf1')
-    textbox_user.send_keys(_user)
-    textbox_password = driver.find_element_by_id('Kf2')
-    textbox_password.send_keys(_pass)
-    driver.find_element_by_link_text('enviar').click()
-    time.sleep(1)
 
-    _cookies = driver.get_cookies()
-    driver.close()
+def neobux_run(_user, _pass):
+    try:
+        driver = webdriver.Firefox()
+        driver.get(neobux)
+        textbox_user = driver.find_element_by_id('Kf1')
+        textbox_user.send_keys(_user)
+        textbox_password = driver.find_element_by_id('Kf2')
+        textbox_password.send_keys(_pass)
+        driver.find_element_by_link_text('enviar').click()
+
+        _cookies = driver.get_cookies()
+        driver.close()
+    except:
+        print('[!] connection error, reload in 10s')
+        driver.close()
+        time.sleep(10)
+        neobux_run(_user, _pass)
 
     # +-------------------------------------------------------------------
     print('[-] start!')
