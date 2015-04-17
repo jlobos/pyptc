@@ -94,21 +94,21 @@ def request(_cookies):
 
 def neobux_run(_user, _pass):
     driver = webdriver.Firefox()
-    driver.get(neobux)  # Entra a la pagina
-    textbox_user = driver.find_element_by_id('Kf1')  # Nombre de Usuario, completamos datos
+    driver.get(neobux)
+    textbox_user = driver.find_element_by_id('Kf1')
     textbox_user.send_keys(_user)
-    textbox_password = driver.find_element_by_id('Kf2')  # Password
+    textbox_password = driver.find_element_by_id('Kf2')
     textbox_password.send_keys(_pass)
     driver.find_element_by_link_text('enviar').click()
-    time.sleep(1)  # Esperamos x segundos
+    time.sleep(1)
 
-    _cookies = driver.get_cookies()  # Cookies =)
+    _cookies = driver.get_cookies()
     driver.close()
 
     # +-------------------------------------------------------------------
     print('[-] start!')
     while True:
-        list_var = request(_cookies)  # Peticion get
+        list_var = request(_cookies)
         if list_var[0] == '1':
 
             print('[-] $ ' + list_var[8])
