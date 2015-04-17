@@ -25,10 +25,7 @@ neobux = 'https://www.neobux.com/m/l/'
 
 # +-----------------------------------------------------------------------
 # Extra Modules
-def module_neobuxAdPrize(_cookies):
-    driver.get('http://www.neobux.com/m/v/')
-    driver.refresh()
-
+#def module_neobuxAdPrize(_sourcepage):
 
 # +-----------------------------------------------------------------------
 
