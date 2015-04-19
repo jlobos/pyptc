@@ -81,7 +81,7 @@ def neobux_detect_ads(_cookies):
                 driver.close()
             detect_popup(driver)
             driver.switch_to_window(win[0])
-        driver.close()
+    driver.close()
 
 def neobux_request(_cookies):
     headers = {'user-agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows 98)'}
@@ -141,7 +141,7 @@ def neobux_run(_user, _pass):
         else:
             print('[!] error sesion')
             time.sleep(random.randrange(start=300, stop=600))
-            run(_ptc, _user, _pass)
+            run(_user, _pass)
 
 # +-----------------------------------------------------------------------
 def run(_ptc, _user, _pass):
