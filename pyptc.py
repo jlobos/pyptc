@@ -84,7 +84,7 @@ def neobux_detect_ads(_cookies):
     driver.close()
 
 def neobux_request(_cookies):
-    headers = {'user-agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows 98)'}
+    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'}
     payload = {'t': 'F' + str(int(time.time() * 1000))}
     cookies = {}
     for s_cookie in _cookies:
