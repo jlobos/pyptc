@@ -1,5 +1,5 @@
 #!/bin/python
-# coding    : utf-8
+# Coding    : utf-8
 # Author    : @27Sawyer
 # Version   : beta 1.0
 # Licence   : GPLv2
