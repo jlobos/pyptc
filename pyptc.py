@@ -50,7 +50,7 @@ def neobux_detect_ads(_cookies):
     i = 0
     ads_number = []
     for x in ads:
-        l = re.findall(r'http://cache1.neodevlda.netdna-cdn.com/imagens/estrela_16.gif"', ads[i])
+        l = re.findall(r'http://img.neobux.com/imagens/estrela_16.gif"', ads[i])
         i += 1
         if len(l) > 0:
             ads_number.append(re.findall(r'(.*?)" onclick="ggz\(', x))
